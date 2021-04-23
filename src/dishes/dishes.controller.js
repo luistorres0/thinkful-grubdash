@@ -13,9 +13,9 @@ const nextId = require("../utils/nextId");
 // =================================================== Middleware =================================================== //
 // ================================================================================================================== //
 
-const dishExists = (req, res, next) => {
+const dishExists = async (req, res, next) => {
   const { dishId } = req.params;
-  const foundDish = dishes.find((dish) => dish.id === dishId);
+  const foundDish = await dishesService.read(dishId);
 
   if (foundDish) {
     res.locals.foundDish = foundDish;
