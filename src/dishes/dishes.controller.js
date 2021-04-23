@@ -1,4 +1,5 @@
 const path = require("path");
+const dishesService = require("./dishes.service");
 
 // Use the existing dishes data
 const dishes = require(path.resolve("src/data/dishes-data"));
@@ -86,8 +87,9 @@ const validateDishParameters = (req, res, next) => {
 // ================================================= Route Handlers ================================================= //
 // ================================================================================================================== //
 
-const list = (req, res, next) => {
-  res.json({ data: dishes });
+const list = async (req, res, next) => {
+  const data = await dishesService.list();
+  res.json({ data });
 };
 
 const read = (req, res, next) => {
