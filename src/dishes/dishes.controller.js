@@ -31,8 +31,12 @@ const dishExists = async (req, res, next) => {
 const areDishIdsEqual = (req, res, next) => {
   const { dishId } = req.params;
   const { id } = req.body.data;
+
+  console.log("data", req.body.data);
+  console.log("dishId", dishId);
+  console.log("id", id);
   if (id) {
-    if (dishId !== id) {
+    if (Number(dishId) !== id) {
       return next({
         status: 400,
         message: `Dish id does not match route id. Dish: ${id}, Route: ${dishId}`,
@@ -101,16 +105,19 @@ const create = async (req, res, next) => {
   res.status(201).json({ data });
 };
 
-const update = (req, res, next) => {
-  const foundDish = res.locals.foundDish;
-  const { data: { name, description, price, image_url } = {} } = req.body;
+const update = async (req, res, next) => {
+  // const foundDish = res.locals.foundDish;
+  // const { data: { name, description, price, image_url } = {} } = req.body;
 
-  foundDish.name = name;
-  foundDish.description = description;
-  foundDish.price = price;
-  foundDish.image_url = image_url;
+  // foundDish.name = name;
+  // foundDish.description = description;
+  // foundDish.price = price;
+  // foundDish.image_url = image_url;
 
-  res.json({ data: foundDish });
+  const { dishId } = req.params;
+  const data = await dishesService.update(req.body.data, Number(dishId));
+
+  res.json({ data });
 };
 
 // ================================================================================================================== //

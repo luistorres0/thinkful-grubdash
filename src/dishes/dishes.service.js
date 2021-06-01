@@ -14,8 +14,16 @@ const create = (newDish) => {
     .then((dishes) => dishes[0]);
 };
 
+const update = (updatedDish, dishId) => {
+  return knex("dishes")
+    .update(updatedDish, "*")
+    .where({ id: dishId })
+    .then((dishes) => dishes[0]);
+};
+
 module.exports = {
   list,
   read,
   create,
+  update,
 };
