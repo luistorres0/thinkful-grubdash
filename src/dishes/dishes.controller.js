@@ -71,7 +71,6 @@ const validateDishParameters = (req, res, next) => {
   }
 
   const newDish = {
-    id: nextId(),
     name,
     description,
     price,
@@ -96,10 +95,10 @@ const read = (req, res, next) => {
   res.json({ data: res.locals.foundDish });
 };
 
-const create = (req, res, next) => {
-  dishes.push(res.locals.newDish);
+const create = async (req, res, next) => {
+  const data = await dishesService.create(res.locals.newDish);
 
-  res.status(201).json({ data: res.locals.newDish });
+  res.status(201).json({ data });
 };
 
 const update = (req, res, next) => {
