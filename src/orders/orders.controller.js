@@ -1,4 +1,5 @@
 const path = require("path");
+const ordersService = require("./orders.service");
 
 // Use the existing order data
 const orders = require(path.resolve("src/data/orders-data"));
@@ -63,7 +64,6 @@ const validateStatusProperty = (req, res, next) => {
     });
   }
 
-
   next();
 };
 
@@ -123,8 +123,10 @@ const isStatusPending = (req, res, next) => {
 // ================================================= Route Handlers ================================================= //
 // ================================================================================================================== //
 
-const list = (req, res, next) => {
-  res.json({ data: orders });
+const list = async (req, res, next) => {
+  const data = await ordersService.list();
+
+  res.json({ data });
 };
 
 const read = (req, res, next) => {

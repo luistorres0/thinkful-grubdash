@@ -1,13 +1,13 @@
 const path = require("path");
 const dishesService = require("./dishes.service");
 
+// REMOVE
 // Use the existing dishes data
 const dishes = require(path.resolve("src/data/dishes-data"));
 
+// REMOVE
 // Use this function to assign ID's when necessary
 const nextId = require("../utils/nextId");
-
-// TODO: Implement the /dishes handlers needed to make the tests pass
 
 // ================================================================================================================== //
 // =================================================== Middleware =================================================== //
@@ -106,14 +106,6 @@ const create = async (req, res, next) => {
 };
 
 const update = async (req, res, next) => {
-  // const foundDish = res.locals.foundDish;
-  // const { data: { name, description, price, image_url } = {} } = req.body;
-
-  // foundDish.name = name;
-  // foundDish.description = description;
-  // foundDish.price = price;
-  // foundDish.image_url = image_url;
-
   const { dishId } = req.params;
   const data = await dishesService.update(req.body.data, Number(dishId));
 
