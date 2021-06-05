@@ -13,9 +13,9 @@ const nextId = require("../utils/nextId");
 // =================================================== Middleware =================================================== //
 // ================================================================================================================== //
 
-const orderExists = (req, res, next) => {
+const orderExists = async (req, res, next) => {
   const { orderId } = req.params;
-  const foundOrder = orders.find((order) => order.id === orderId);
+  const foundOrder = await ordersService.read(Number(orderId));
   if (foundOrder) {
     res.locals.foundOrder = foundOrder;
     return next();
