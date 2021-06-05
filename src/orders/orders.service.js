@@ -1,13 +1,23 @@
 const knex = require("../db/connection");
 
 const list = () => {
-  return knex("orders as o")
-    .join("orders_dishes as od", "o.id", "od.order_id")
-    .join("dishes as d", "d.id", "od.dish_id")
+  return knex("orders")
     .select("*")
-    .then(rows => {
-        console.log(rows);
-        return rows;
+    .then((orders) => {
+      const formattedOrders = orders.map((order) => {
+        return knex("orders_dishes as od")
+          .join("dishes", "dishes.dish_id", "od.dish_id")
+          .select("dishes.*", "od.quantity")
+          .where({ order_id: order.order_id })
+          .then((dishes) => {
+            return {
+              ...order,
+              dishes,
+            };
+          });
+      });
+
+      return Promise.all(formattedOrders);
     });
 };
 

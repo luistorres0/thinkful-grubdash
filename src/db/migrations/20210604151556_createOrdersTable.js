@@ -1,6 +1,6 @@
 exports.up = function (knex) {
   return knex.schema.createTable("orders", (table) => {
-    table.increments("id").primary();
+    table.increments("order_id").primary();
     table.string("deliverTo");
     table.string("mobileNumber");
     table.string("status");
