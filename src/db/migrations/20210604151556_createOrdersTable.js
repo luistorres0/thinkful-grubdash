@@ -4,6 +4,7 @@ exports.up = function (knex) {
     table.string("deliverTo");
     table.string("mobileNumber");
     table.string("status");
+    table.timestamps(true, true);
   });
 };
 
