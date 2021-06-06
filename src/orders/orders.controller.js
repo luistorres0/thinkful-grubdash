@@ -144,11 +144,10 @@ const update = async (req, res, next) => {
   res.json({ data });
 };
 
-const destroy = (req, res, next) => {
+const destroy = async (req, res, next) => {
   const { orderId } = req.params;
-  const index = orders.findIndex((order) => order.id === orderId);
 
-  orders.splice(index, 1);
+  await ordersService.destroy(Number(orderId));
 
   res.sendStatus(204);
 };

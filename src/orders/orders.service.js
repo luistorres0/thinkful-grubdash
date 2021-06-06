@@ -88,9 +88,14 @@ const update = (updatedOrder) => {
     });
 };
 
+const destroy = (orderId) => {
+  return knex("orders").del().where({ order_id: orderId });
+};
+
 module.exports = {
   list,
   read,
   create,
   update,
+  destroy,
 };
