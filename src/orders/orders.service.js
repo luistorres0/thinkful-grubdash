@@ -40,7 +40,57 @@ const read = (orderId) => {
     });
 };
 
+const create = (newOrder) => {
+  const orderOnlyValues = {
+    deliverTo: newOrder.deliverTo,
+    mobileNumber: newOrder.mobileNumber,
+    status: newOrder.status,
+  };
+
+  return knex("orders")
+    .insert(orderOnlyValues, "*")
+    .then((orders) => {
+      const formattedDishes = newOrder.dishes.map((dish) => ({
+        dish_id: dish.dish_id,
+        order_id: orders[0].order_id,
+        quantity: dish.quantity,
+      }));
+      return knex("orders_dishes")
+        .insert(formattedDishes, "*")
+        .then(() => read(orders[0].order_id));
+    });
+};
+
+const update = (updatedOrder) => {
+  const orderOnlyValues = {
+    deliverTo: updatedOrder.deliverTo,
+    mobileNumber: updatedOrder.mobileNumber,
+    status: updatedOrder.status,
+  };
+
+  return knex("orders")
+    .update(orderOnlyValues, "*")
+    .where({ order_id: updatedOrder.order_id })
+    .then((orders) => {
+      return knex("orders_dishes")
+        .del()
+        .where({ order_id: orders[0].order_id })
+        .then(() => {
+          const formattedDishes = updatedOrder.dishes.map((dish) => ({
+            dish_id: dish.dish_id,
+            order_id: orders[0].order_id,
+            quantity: dish.quantity,
+          }));
+          return knex("orders_dishes")
+            .insert(formattedDishes, "*")
+            .then(() => read(orders[0].order_id));
+        });
+    });
+};
+
 module.exports = {
   list,
   read,
+  create,
+  update,
 };

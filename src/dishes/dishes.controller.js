@@ -30,16 +30,13 @@ const dishExists = async (req, res, next) => {
 
 const areDishIdsEqual = (req, res, next) => {
   const { dishId } = req.params;
-  const { id } = req.body.data;
+  const { dish_id } = req.body.data;
 
-  console.log("data", req.body.data);
-  console.log("dishId", dishId);
-  console.log("id", id);
-  if (id) {
-    if (Number(dishId) !== id) {
+  if (dish_id) {
+    if (Number(dishId) !== dish_id) {
       return next({
         status: 400,
-        message: `Dish id does not match route id. Dish: ${id}, Route: ${dishId}`,
+        message: `Dish id does not match route id. Dish: ${dish_id}, Route: ${dishId}`,
       });
     }
   }

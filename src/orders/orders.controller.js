@@ -29,12 +29,12 @@ const orderExists = async (req, res, next) => {
 
 const areOrderIdsEqual = (req, res, next) => {
   const { orderId } = req.params;
-  const { id } = req.body.data;
-  if (id) {
-    if (orderId !== id) {
+  const { order_id } = req.body.data;
+  if (order_id) {
+    if (order_id !== Number(orderId)) {
       return next({
         status: 400,
-        message: `Order id does not match route id. Order: ${id}, Route: ${orderId}`,
+        message: `Order id does not match route id. Order: ${order_id}, Route: ${orderId}`,
       });
     }
   }
@@ -95,15 +95,6 @@ const validateOrderParameters = (req, res, next) => {
     }
   });
 
-  const newOrder = {
-    id: nextId(),
-    deliverTo,
-    mobileNumber,
-    status,
-    dishes,
-  };
-
-  res.locals.newOrder = newOrder;
   next();
 };
 
@@ -133,13 +124,13 @@ const read = (req, res, next) => {
   res.json({ data: res.locals.foundOrder });
 };
 
-const create = (req, res, next) => {
-  orders.push(res.locals.newOrder);
+const create = async (req, res, next) => {
+  const data = await ordersService.create(req.body.data);
 
-  res.status(201).json({ data: res.locals.newOrder });
+  res.status(201).json({ data });
 };
 
-const update = (req, res, next) => {
+const update = async (req, res, next) => {
   const foundOrder = res.locals.foundOrder;
   const { data: { deliverTo, mobileNumber, status, dishes } = {} } = req.body;
 
@@ -148,7 +139,9 @@ const update = (req, res, next) => {
   foundOrder.status = status;
   foundOrder.dishes = dishes;
 
-  res.json({ data: foundOrder });
+  const data = await ordersService.update(foundOrder);
+
+  res.json({ data });
 };
 
 const destroy = (req, res, next) => {

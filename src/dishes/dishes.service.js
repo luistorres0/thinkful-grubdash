@@ -5,7 +5,7 @@ const list = () => {
 };
 
 const read = (dishId) => {
-  return knex("dishes").select("*").where({ id: dishId }).first();
+  return knex("dishes").select("*").where({ dish_id: dishId }).first();
 };
 
 const create = (newDish) => {
@@ -17,7 +17,7 @@ const create = (newDish) => {
 const update = (updatedDish, dishId) => {
   return knex("dishes")
     .update(updatedDish, "*")
-    .where({ id: dishId })
+    .where({ dish_id: dishId })
     .then((dishes) => dishes[0]);
 };
 
